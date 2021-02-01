@@ -1,0 +1,71 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block content %}
+<body>
+  <div class="product-big-title-area">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-bit-title text-center">
+                    <h2>
+                        Category : {{category_list}}
+                        
+                      </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  <div class="row margin-bottom-40 ">
+    <!-- BEGIN SIDEBAR -->
+         {% include "sidebar.html" %} 
+      
+    
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="col-md-9 col-sm-8">
+      <h2>Items</h2>
+      <div class="row">
+        {% for item in object_list  %}
+        <div class="col-md-3 col-sm-6">
+            <div class="single-shop-product">
+                <div class="product-upper">
+                    <img src="{{item.image.url}}" alt="{{item.title}}">
+                </div>
+                <h2><a href="{{ item.get_absolute_url }}">{{item.title}}</a></h2>
+                <div class="product-carousel-price">
+                    <ins>{{item.price}}</ins> <del>{{item.discounted_price  }}</del>
+                </div>  
+                
+                <div class="product-option-shop">
+                    <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow" href="{{ item.get_add_to_cart_url }}">Add to cart</a>
+                </div>                       
+            </div>
+        </div>
+        {% endfor %}
+        
+    </div>
+    </div>
+    <!-- END CONTENT -->
+  </div>
+      <!--/.Navbar-->
+      <div class="product-carousel">
+        {% for item in object_list %}
+        <div class="single-product">
+            <div class="product-f-image">
+                <img src="{{item.image.url}}" class="img-responsive" alt="image of {{item.title}}">
+                <div class="product-hover">
+                    <a href="#" class="add-to-cart-link"><i class="fa fa-shopping-cart"></i> Add to cart</a>
+                    <a href="{{ item.get_absolute_url }}" class="view-details-link"><i class="fa fa-link"></i> See details</a>
+                </div>
+            </div>
+            <h2><a href="{{ item.get_absolute_url }}">{{item.title}}</a></h2>
+            
+            <div class="product-carousel-price">
+                <ins>{{item.price}}</ins> <del>{{item.discounted_price}}</item></del>
+            </div> 
+        </div> 
+        {% endfor %}
+    </div>
+</body>
+{% endblock %}

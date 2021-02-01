@@ -1,0 +1,199 @@
+{% extends 'base.html'%}
+
+{% block content %}
+  <body>
+   
+   
+    <div class="product-big-title-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="product-bit-title text-center">
+                        <h2>Shop</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="single-product-area">
+        <div class="zigzag-bottom"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="single-sidebar">
+                        <h2 class="sidebar-title">Search Products</h2>
+                        <form action="">
+                            <input type="text" placeholder="Search products...">
+                            <input type="submit" value="Search">
+                        </form>
+                    </div>
+                    
+                    <div class="single-sidebar">
+                        <h2 class="sidebar-title">Products</h2>
+                        {% for item in items %}
+                        <div class="thubmnail-recent">
+                            <img src="{{item.image.url}}" class="recent-thumb" alt="{{item.title}}">
+                            <h2><a href="{{ item.get_absolute_url }}">{{item.title}}</a></h2>
+                            <div class="product-sidebar-price">
+                                <ins>{{item.price}}</ins> <del>{{item.discounted_price  }}</del>
+                            </div>                             
+                        </div>
+                        {% endfor %}
+                        
+                    </div>
+                    
+                    <div class="single-sidebar">
+                        <h2 class="sidebar-title">Recent Posts</h2>
+                        <ul>
+                            {% for item in indexrecent %}
+                            <li><a href="{{item.get_absolute_url}}">{{item.title}}</a></li>
+                            
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-md-8">
+                    <div class="product-content-right">
+                        <div class="product-breadcroumb">
+                            <a href="">Home</a>
+                            <a href="">{{item.category.title}}</a>
+                            <a href="">{{item.title}}</a>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="product-images">
+                                    <div class="product-main-img">
+                                        <img src="{{item.image.url}}" alt="image of {{item.title}}">
+                                    </div>
+                                    
+                                    <div class="product-gallery">
+                                        <img src="{{item.image.url}}" alt="">
+                                        <img src="{{item.image.url}}" alt="">
+                                        <img src="{{item.image.url}}" alt="">
+                                    </div>
+                                    
+                                    {% load mptt_tags %}
+                                    <div><form action="/addcomment/{{ item.id }}" class="reviews-form" role="form" method="POST">
+                                        {% csrf_token %}
+                                        <h3>Public comment...</h3> 
+                                        <img src="{{user.profile.image.url}}" alt="Avatar" class="avatar" style=" vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;">{{user}}
+                                        <div class="form-group">
+                                          {{cform}} </div>
+                                        
+                                        <div class="padding-top-20">                  
+                                          <button type="submit" class="btn btn-primary">Send</button>
+                                        </div>
+                                      </form>
+                                      <!-- END FORM--> 
+                                        {% recursetree comments %}
+                                        {% if node.item == item %}
+                                        <div>
+                                            <img src="{{node.user.profile.image.url}}" alt="Avatar" class="avatar" style=" vertical-align: middle;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;">
+                                            <strong>{{node.user}}</strong>:
+                                            
+                                            {{node.comment}}</div>
+                                        {% if not node.is_leaf_node %}
+                                        <div>
+                                            {{children}}
+                                        </div>
+                                        {% endif %}
+                                        {% endif %}
+                                        {% endrecursetree %}
+
+
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-sm-6">
+                                <div class="product-inner">
+                                    <h2 class="product-name">{{item.title}}</h2>
+                                    <div class="product-inner-price">
+                                        <ins>{{item.price}}</ins> <del>{{item.discounted_price}}</del>
+                                    </div>    
+                                    
+                                    <a href = "{{ item.get_add_to_cart_url }}">
+                                        <button class="add-to-cart" type="submit">Add to cart</button>
+                                    </a>   
+                                    
+                                    <div class="product-inner-category">
+                                        <p>Category: <a href="">{{item.category.title}}</a>
+                                    </div> 
+                                    
+                                    <div role="tabpanel">
+                                        <ul class="product-tab" role="tablist">
+                                            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Description</a></li>
+                                            <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Reviews</a></li>
+                                        </ul>
+                                        <div class="tab-content">
+                                            <div role="tabpanel" class="tab-pane fade in active" id="home">
+                                                <h2>Product Description</h2>  
+                                                <p>{{item.Description}}</p>
+                                            </div>
+                                            <form role="form" method = "POST">
+                                            {% csrf_token %}
+                                            <div role="tabpanel" class="tab-pane fade" id="profile">
+                                                <h2>Reviews</h2>
+                                                <div class="submit-review">
+                                                    <div class="rating-chooser">
+                                                        <p>Your rating</p>
+
+                                                        <div class="rating-wrap-post">
+                                                            <input type="radio" id="star5" class="fa fa-star-o empty" name="rate" value="5" /><label for="star5"></label>
+                                                            <input type="radio" id="star4" class="fa fa-star" name="rate" value="4" /><label for="star4"></label>
+                                                            <input type="radio" id="star3" class="fa fa-star" name="rate" value="3" /><label for="star3"></label>
+                                                            <input type="radio" id="star2" class="fa fa-star" name="rate" value="2" /><label for="star2"></label>
+                                                            <input type="radio" id="star1" class="fa fa-star" name="rate" value="1" /><label for="star1"></label>
+                                                        </div>
+                                                    </div>
+                                                    <p><input type="submit" value="Submit"></p>
+                                                </div>
+                                            </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="related-products-wrapper">
+                            <h2 class="related-products-title">Related Products</h2>
+                            <div class="related-products-carousel">
+                                {% for item in indexrecent %}
+                                <div class="single-product">
+                                    <div class="product-f-image">
+                                        <img src="{{item.image.url}}" alt="{{item.title}}">
+                                        <div class="product-hover">
+                                            <a href="{{ item.get_add_to_cart_url }}" class="add-to-cart-link"><i class="fa fa-shopping-cart"></i> Add to cart</a>
+                                            <a href="{{ item.get_absolute_url }}" class="view-details-link"><i class="fa fa-link"></i> See details</a>
+                                        </div>
+                                    </div>
+
+                                    <h2><a href="">{{item.title}}</a></h2>
+
+                                    <div class="product-carousel-price">
+                                        <ins>{{item.price}}</ins> <del>{{item.discounted_price}}</del>
+                                    </div> 
+                                </div>
+                                {% endfor %}                       
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}

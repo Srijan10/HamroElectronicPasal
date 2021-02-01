@@ -1,0 +1,215 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+  <body>
+   
+
+    <div class="slider-area">
+        <div class="zigzag-bottom"></div>
+        <div id="slide-list" class="carousel carousel-fade slide">
+            
+            <div class="slide-bulletz">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <ol class="carousel-indicators slide-indicators">
+                                {% for slider in sliders %}
+                                <li data-target="#slide-list" data-slide-to="{{slider.rank}}" class="{{slider.status}}"></li>
+                                {% endfor %}
+                            </ol>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="carousel-inner" role="listbox">
+                {% for slider in sliders %}
+                <div class="item {{slider.status}}">
+                    <div class="single-slide">
+                        <div class="slide-bg slide-{{slider.rank}}"></div>
+                        <div class="slide-text-wrapper">
+                            <div class="slide-text">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-6 col-md-offset-6">
+                                            <div class="slide-content">
+                                                <h2>{{slider.text_one}}</h2>
+                                                <p>{{slider.text_two}}</p>
+                                                <p>{{slider.text_three}}</p>
+                                                <a href="" class="readmore">Learn more</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <style>
+  
+  .slide-{{slider.rank}} {background-image: url({{slider.image.url}})}
+
+  </style>
+                {% endfor %}
+                
+            </div>
+
+        </div>        
+    </div> <!-- End slider area -->
+    
+    <div class="promo-area">
+        <div class="zigzag-bottom"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-sm-6">
+                    <div class="single-promo">
+                        <i class="fa fa-refresh"></i>
+                        <p>30 Days return</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="single-promo">
+                        <i class="fa fa-truck"></i>
+                        <p>Free shipping</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="single-promo">
+                        <i class="fa fa-lock"></i>
+                        <p>Secure payments</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="single-promo">
+                        <i class="fa fa-gift"></i>
+                        <p>New products</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- End promo area -->
+    
+    <div class="maincontent-area">
+        <div class="zigzag-bottom"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="latest-product">
+                        <h2 class="section-title">Latest Products</h2>
+                        <div class="product-carousel">
+                            {% for item in items %}
+                            <div class="single-product">
+                                <div class="product-f-image">
+                                    <img src="{{item.image.url}}" class="img-responsive" alt="image of {{item.title}}" style="height:220px;">
+                                    <div class="product-hover">
+                                        <a href="{{ item.get_add_to_cart_url }}" class="add-to-cart-link"><i class="fa fa-shopping-cart"></i> Add to cart</a>
+                                        <a href="{{ item.get_absolute_url }}" class="view-details-link"><i class="fa fa-link"></i> See details</a>
+                                    </div>
+                                </div>
+                                
+                                <h2><a href="{{ item.get_absolute_url }}">{{item.title}}</a></h2>
+                                
+                                <div class="product-carousel-price">
+                                    <ins>{{item.price}}</ins> <del>{{item.discounted_price}}</item></del>
+                                </div> 
+                            </div> 
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- End main content area -->
+    
+    <div class="brands-area">
+        <div class="zigzag-bottom"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="brand-wrapper">
+                        <h2 class="section-title">Brands</h2>
+                        <div class="brand-list">{% for brand in brands %}
+                            <img src="{{brand.image.url}}" alt="{{brand.title}}">
+                            {% endfor %}
+                                                      
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- End brands area -->
+    
+    <div class="product-widget-area">
+        <div class="zigzag-bottom"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="single-product-widget">
+                        <h2 class="product-wid-title">Top Sellers</h2>
+                        {% for item in indexsale %}
+                            <div class="single-wid-product">
+                                <a href="single-product.html"><img src="{{item.image.url}}" alt="image of {{item.title}}" class="product-thumb"></a>
+                                <h2><a href="single-product.html">{{item.title}}</a></h2>
+                                <div class="product-wid-rating">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </div>
+                                <div class="product-wid-price">
+                                    <ins>{{item.price}}</ins> <del>{{item.discounted_price}}</del>
+                                </div>                            
+                            </div>
+                        {% endfor %}
+                        
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="single-product-widget">
+                        <h2 class="product-wid-title">Recently Viewed</h2>
+                        {% for item in indexrecent %}
+                        <div class="single-wid-product">
+                            <a href="single-product.html"><img src="{{item.image.url}}" alt="image of {{item.title}}" class="product-thumb"></a>
+                            <h2><a href="single-product.html">{{item.title}}</a></h2>
+                            <div class="product-wid-rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <div class="product-wid-price">
+                                <ins>{{item.price}}</ins> <del>{{item.discounted_price}}</del>
+                            </div>                            
+                        </div>
+                        {% endfor %}
+                        
+                    </div>
+                </div><div class="col-md-4">
+                    <div class="single-product-widget">
+                        <h2 class="product-wid-title">Top New</h2>
+                        {% for item in indexnew %}
+                        <div class="single-wid-product">
+                            <a href="single-product.html"><img src="{{item.image.url}}" alt="image of {{item.title}}" class="product-thumb"></a>
+                            <h2><a href="single-product.html">{{item.title}}</a></h2>
+                            <div class="product-wid-rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                            <div class="product-wid-price">
+                                <ins>{{item.price}}</ins> <del>{{item.discounted_price}}</del>
+                            </div>                            
+                        </div>
+                        {% endfor %}
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- End product widget area -->
+
+    {% endblock %}

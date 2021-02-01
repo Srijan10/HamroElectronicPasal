@@ -1,0 +1,36 @@
+{% extends 'base.html'%}
+{% load static %}
+{% block content %}
+<body>
+  
+<div class="row margin-bottom-40 ">
+    <!-- BEGIN SIDEBAR -->
+    {% include "sidebar.html" %}
+   
+    <div class="col-md-9 col-sm-8">
+      <h2>Items</h2>
+      <div class="row">
+        {% for item in items %}
+        <div class="col-md-3 col-sm-6">
+            <div class="single-shop-product">
+                <div class="product-upper">
+                    <img src="{{item.image.url}}" alt="{{item.title}}">
+                </div>
+                <h2><a href="{{ item.get_absolute_url }}">{{item.title}}</a></h2>
+                <div class="product-carousel-price">
+                    <ins>{{item.price}}</ins> <del>{{item.discounted_price  }}</del>
+                </div>  
+                
+                <div class="product-option-shop">
+                    <a class="add_to_cart_button" data-quantity="1" data-product_sku="" data-product_id="70" rel="nofollow" href="{{ item.get_add_to_cart_url }}">Add to cart</a>
+                </div>                       
+            </div>
+        </div>
+        {% endfor %}
+        
+    </div>
+</div>
+</div>
+  
+</body>
+{% endblock %}

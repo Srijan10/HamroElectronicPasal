@@ -1,0 +1,26 @@
+
+    {% load mptt_tags %}
+    <div class="sidebar col-md-3 col-sm-4">
+      <div class="side-bar">
+      {% recursetree categorys %} 
+        
+        <li class="active">
+          <a href="{% url 'home:category-list' node.title %}">
+            {{ node.title }}
+          </a>
+          {% if not node.is_leaf_node %}
+          <div class="sub-sidebar-1" >
+          
+          <ul>
+            <li>
+              {{ children }}
+            </li>
+          </ul>
+          
+        </div>
+        {% endif %}
+        </li>
+        
+      {% endrecursetree %}
+    </div>
+  </div>

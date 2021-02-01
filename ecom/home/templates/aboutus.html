@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %} About US-{{ setting.title}} {% endblock %}
+{% block description %} {{ setting.description}} {% endblock %}
+{% block keywords %} {{ setting.keywords}} {% endblock %}
+
+{% block content %}
+
+<div class="main">
+    <div class="container">
+      
+      <!-- BEGIN SIDEBAR & CONTENT -->
+      <div class="row margin-bottom-40">
+
+        <!-- BEGIN CONTENT -->
+        <div>
+          <h1>About us</h1>
+          <div class="content-page">
+            {{ setting.aboutus|safe}}
+          </div>
+        </div>
+        <!-- END CONTENT -->
+      </div>
+      <!-- END SIDEBAR & CONTENT -->
+    </div>
+  </div>
+
+{% endblock %}

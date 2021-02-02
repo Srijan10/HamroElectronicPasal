@@ -1,7 +1,7 @@
 from django import forms
 from django_countries.fields import CountryField
 from django_countries.widgets import CountrySelectWidget
-from .models import Profile, Comment, Riview
+from .models import Profile, Comment, Riview, Maintaince
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
@@ -81,11 +81,10 @@ class ProfileUpdateForm(forms.ModelForm):
         model = Profile
         fields = ['image']
 
-class ComputerMaintainanceForm(forms.Form):
-    Email = forms.EmailField()
-    Mobile_no = forms.IntegerField(max_value=10)
-    Problem_Text = forms.CharField()
-    Photo = forms.ImageField()
+class ComputerMaintainanceForm(forms.ModelForm):
+    class Meta:
+        model = Maintaince
+        fields = ['email', 'phone', 'problem']
 
     
 class CommentForm(forms.ModelForm):

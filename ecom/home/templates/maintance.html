@@ -1,1 +1,14 @@
-<form action="/maintance/"
+{% extends 'base.html'%}
+{% load static %}
+{% block content %}
+{% load crispy_forms_tags %}
+<form action = "" method="POST" enctype="multipart/form-data">
+   
+    <div>
+        {% csrf_token %}
+        {{ mform|crispy }}
+    </div>
+    
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}

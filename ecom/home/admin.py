@@ -1,6 +1,6 @@
 from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
-from .models import Category,Item,Slider,Brand,Setting,Images,Order,OrderItem,Profile, Customer,Cart,CartItem,Comment,Riview
+from .models import Category,Maintaince,Item,Slider,Brand,Setting,Images,Order,OrderItem,Profile, Customer,Cart,CartItem,Comment,Riview
 
 class SettingAdmin(admin.ModelAdmin):
     list_display=['title','company','update_at','status']
@@ -20,3 +20,4 @@ admin.site.register(CartItem)
 admin.site.register(Riview)
 admin.site.register(Setting, SettingAdmin)
 admin.site.register(Comment, MPTTModelAdmin)
+admin.site.register(Maintaince)

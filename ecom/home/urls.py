@@ -17,6 +17,7 @@ from .views import (
     addcomment,
     addRiview,
     aboutus,
+    Maintain,
     )
 app_name = 'home'
 
@@ -61,5 +62,6 @@ urlpatterns = [
     
     path('addRiview/', addRiview,name='addRiview'),
     path('aboutus/',aboutus, name='aboutus'),
+    path('maintain/',Maintain,name='maintain'),
    
 ]

@@ -349,3 +349,12 @@ class Riview(models.Model):
 
     def __str__(self):
         return f'rated by {self.user}'
+
+class Maintaince(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    email=models.EmailField()
+    phone=models.IntegerField()
+    problem=models.CharField(max_length=500)
+
+    def __str__(self):
+        return f'sent by {self.user}'

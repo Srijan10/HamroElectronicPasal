@@ -1,10 +1,9 @@
 import random
 import string
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import DetailView ,TemplateView, View, ListView, CreateView
 
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect
 from django.utils import timezone
 from .forms import CheckoutForm, CouponForm, RefundForm, PaymentForm, ComputerMaintainanceForm
 from django.urls import reverse_lazy
@@ -13,8 +12,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
-from home.models import Item,Slider,Brand, OrderItem , Order,Category, Address,Coupon,Payment,Refund, Comment,Setting
-from .forms import UserUpdateForm, ProfileUpdateForm, UserRegisterForm, CommentForm, RiviewForm
+from home.models import Item,Slider,Brand, OrderItem , Order,Category, Address,Coupon,Payment,Refund, Comment,Setting,Maintaince
+from .forms import UserUpdateForm, ProfileUpdateForm, UserRegisterForm, CommentForm, RiviewForm,ComputerMaintainanceForm
 
 class EcomMixin(object):
     def dispatch(self, request, *args, **kwargs):
@@ -397,3 +396,15 @@ def aboutus(request):
     categorys = Category.objects.all()[:5]
     context = {'setting':setting, 'categorys':categorys}
     return render(request, 'aboutus.html', context)
+
+@login_required
+def Maintain(request):
+    mform = ComputerMaintainanceForm()
+    if request.method == 'POST':
+        mform = ComputerMaintainanceForm(request.POST)
+        if mform.is_valid():
+            mform.save()
+
+    template_name = 'maintance.html'
+    context = {'mform' : mform}
+    return render(request, template_name, context)

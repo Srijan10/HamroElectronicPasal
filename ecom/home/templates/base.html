@@ -44,18 +44,8 @@
     height: 50px;
     border-radius: 50%;">
                             </a></li>
-                            <li><a href="#"><i class="fa fa-heart"></i> Wishlist</a></li>
-                            <li><a href="cart.html"><i class="fa fa-user"></i> My Cart</a></li>
                             <li><a href="{% url 'home:checkout' %}"><i class="fa fa-user"></i> Checkout</a></li>
-                            <li class="nav-item">
-                                <a href="{% url 'home:cart' %}" class="nav-link waves-effect">
-                                
-                                <i class="fa fa-shopping-cart" aria-hidden="true" style="color:maroon"></i>
-
-
-                                <span class="clearfix  d-sm-inline-block"> Cart </span>
-                                </a>
-                            </li>
+                            
                             <li class="nav-item">
                                 <a class="nav-link waves-effect" href="{% url 'home:logout' %}">
                                 <span class="clearfix  d-sm-inline-block"> Logout </span>
@@ -78,25 +68,7 @@
                     </div>
                 </div>
                 
-                <div class="col-md-4">
-                    <div class="header-right">
-                        <ul class="list-unstyled list-inline">
-                            <li class="dropdown dropdown-small">
-                                <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span class="key">currency :</span><span class="value">NRS</span><b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">NRS</a></li>
-                                </ul>
-                            </li>
-
-                            <li class="dropdown dropdown-small">
-                                <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" href="#"><span class="key">language :</span><span class="value">English </span><b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">English</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div> <!-- End header area -->
@@ -141,7 +113,7 @@
                         <li><a href="{% url 'home:cart' %}">Cart</a></li>
                         <li><a href="{% url 'home:category' %}">Category</a></li>
                         <li><a href="{% url 'home:aboutus' %}">About Us</a></li>
-                        <li><a href="#"></a></li>
+                        <li><a href="{% url 'home:maintain' %}">Maintain and Repair</a></li>
                     </ul>
                     <ul>       
                         <li class="nav-item">
@@ -217,17 +189,7 @@
                 </div>
             </div>
             
-            <div class="col-md-3 col-sm-6">
-                <div class="footer-newsletter">
-                    <h2 class="footer-wid-title">Newsletter</h2>
-                    <p>Sign up to our newsletter and get exclusive deals you wont find anywhere else straight to your inbox!</p>
-                    <div class="newsletter-form">
-                        <form action="#">
-                            <input type="email" placeholder="Type your email">
-                            <input type="submit" value="Subscribe">
-                        </form>
-                    </div>
-                </div>
+            
             </div>
         </div>
     </div>

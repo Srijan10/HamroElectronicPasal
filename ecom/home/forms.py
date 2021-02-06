@@ -4,30 +4,23 @@ from django_countries.widgets import CountrySelectWidget
 from .models import Profile, Comment, Riview, Maintaince
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from phonenumber_field.modelfields import PhoneNumberField
 
 PAYMENT_CHOICES = (
-    ('S', 'Stripe'),
-    ('P', 'PayPal')
+    ('S', 'eSewa'),
+    ('P', 'PaymentOneDelivery')
 )
 
 
 class CheckoutForm(forms.Form):
     shipping_address = forms.CharField(required=False)
     shipping_address2 = forms.CharField(required=False)
-    shipping_country = CountryField(blank_label='(select country)').formfield(
-        required=False,
-        widget=CountrySelectWidget(attrs={
-            'class': 'custom-select d-block w-100',
-        }))
+    
     shipping_zip = forms.CharField(required=False)
 
     billing_address = forms.CharField(required=False)
     billing_address2 = forms.CharField(required=False)
-    billing_country = CountryField(blank_label='(select country)').formfield(
-        required=False,
-        widget=CountrySelectWidget(attrs={
-            'class': 'custom-select d-block w-100',
-        }))
+    
     billing_zip = forms.CharField(required=False)
 
     same_billing_address = forms.BooleanField(required=False)
@@ -58,7 +51,8 @@ class RefundForm(forms.Form):
 
 
 class PaymentForm(forms.Form):
-    stripeToken = forms.CharField(required=False)
+    PhoneNo =  PhoneNumberField()
+    eSewaToken = forms.CharField(required=False)
     save = forms.BooleanField(required=False)
     use_default = forms.BooleanField(required=False)
 

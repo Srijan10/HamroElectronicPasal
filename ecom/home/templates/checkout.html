@@ -1,221 +1,157 @@
+  
 {% extends "base.html" %}
-{% load static %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 
-    
-    <div class="product-big-title-area">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="product-bit-title text-center">
-                        <h2>Shopping Cart</h2>
-                    </div>
+  <main >
+    <div class="container wow fadeIn">
+      <h2 class="my-5 h2 text-center">Checkout form</h2>
+      <div class="row">
+        <div class="col-md-8 mb-4">
+          <div class="card">
+            <form method="POST" class="card-body">
+              {% csrf_token %}
+
+              <h3>Shipping address</h3>
+
+              <div class='hideable_shipping_form'>
+
+                <div class="md-form mb-5">
+                  <input type='text' placeholder='1234 Main St' id='shipping_address' name='shipping_address' class='form-control' />
+                  <label for="shipping_address" class="">Address</label>
                 </div>
-            </div>
+
+                <div class="md-form mb-5">
+                  <input type='text' placeholder='Apartment or suite' id='shipping_address2' name='shipping_address2' class='form-control' />
+                  <label for="shipping_address2" class="">Address 2 (optional)</label>
+                </div>
+
+                <div class="row">
+                  
+                  <div class="col-lg-4 col-md-6 mb-4">
+                    <label for="shipping_phone">Phone</label>
+                    <input type='number' placeholder='+977' id='shipping_phone' name='shipping_phone' class='form-control' />
+                    <div class="invalid-feedback">
+                      +977 is required.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" name="same_billing_address" id="same_billing_address">
+                  <label class="custom-control-label" for="same_billing_address">Billing address is the same as my shipping address</label>
+                </div>
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" name="set_default_shipping" id="set_default_shipping">
+                  <label class="custom-control-label" for="set_default_shipping">Save as default shipping address</label>
+                </div>
+
+              </div>
+
+              {% if default_shipping_address %}
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" name="use_default_shipping" id="use_default_shipping">
+                <label class="custom-control-label" for="use_default_shipping">Use default shipping address: {{ default_shipping_address.street_address|truncatechars:10 }}</label>
+              </div>
+              {% endif %}
+
+              <hr>
+
+              <h3>Billing address</h3>
+
+              <div class='hideable_billing_form'>
+                <div class="md-form mb-5">
+                  <input type='text' placeholder='1234 Main St' id='billing_address' name='billing_address' class='form-control' />
+                  <label for="billing_address" class="">Address</label>
+                </div>
+
+                <div class="md-form mb-5">
+                  <input type='text' placeholder='Apartment or suite' id='billing_address2' name='billing_address2' class='form-control' />
+                  <label for="billing_address2" class="">Address 2 (optional)</label>
+                </div>
+
+                <div class="row">
+                  
+
+                  <div class="col-lg-4 col-md-6 mb-4">
+                    <label for="billing_phone">Phone</label>
+                    <input type='number' placeholder='+977' id='billing_phone' name='billing_phone' class='form-control' />
+                    <div class="invalid-feedback">
+                        +977 is required.
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="custom-control custom-checkbox">
+                  <input type="checkbox" class="custom-control-input" name="set_default_billing" id="set_default_billing">
+                  <label class="custom-control-label" for="set_default_billing">Save as default billing address</label>
+                </div>
+
+              </div>
+
+              {% if default_billing_address %}
+              <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" name="use_default_billing" id="use_default_billing">
+                <label class="custom-control-label" for="use_default_billing">Use default billing address: {{ default_billing_address.street_address|truncatechars:10 }}</label>
+              </div>
+              {% endif %}
+              <hr>
+
+              <h3>Payment option</h3>
+
+              <div class="d-block my-3">
+                {% for value, name in form.fields.payment_option.choices %}
+                <div class="custom-control custom-radio">
+                  <input id="{{ name }}" name="payment_option" value="{{ value }}" type="radio" class="custom-control-input" required>
+                  <label class="custom-control-label" for="{{ name }}">{{ name }}</label>
+                </div>
+                {% endfor %}
+              </div>
+
+              <hr class="mb-4">
+              <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+
+            </form>
+
+          </div>
+
         </div>
-    </div>
-    
-    
-    <div class="single-product-area">
-        <div class="zigzag-bottom"></div>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="single-sidebar">
-                        <h2 class="sidebar-title">Search Products</h2>
-                        <form action="">
-                            <input type="text" placeholder="Search products...">
-                            <input type="submit" value="Search">
-                        </form>
-                    </div>
-                    
-                    <div class="single-sidebar">
-                        <h2 class="sidebar-title">Products</h2>
-                        {% for item in object_list %}
-                        <div class="thubmnail-recent">
-                            <img src="{{item.image.url}}" class="recent-thumb" alt="">
-                            <h2><a href="single-product.html">{{item.title}}</a></h2>
-                            <div class="product-sidebar-price">
-                                <ins>Rs {{item.price}}</ins> <del>Rs {{item.discounted_price}}</del>
-                            </div>   
-                            </div>
-                            {% endfor %}                           
-                        </div>
-                        
-                    
-                    <div class="single-sidebar">
-                        <h2 class="sidebar-title">Recent Posts</h2>
-                        <ul>
-                            {% for item in object_list %}
-                            <li><a href="single-product.html">{{item.title}}</a></li>
-                            {% endfor %} 
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="col-md-8">
-                    <div class="product-content-right">
-                        <div class="woocommerce">
-                            <div class="woocommerce-info">Returning customer? <a class="showlogin" data-toggle="collapse" href="#login-form-wrap" aria-expanded="false" aria-controls="login-form-wrap">Click here to login</a>
-                            </div>
 
-                            <form id="login-form-wrap" class="login collapse" method="post">
-
-
-                                <p>If you have shopped with us before, please enter your details in the boxes below. If you are a new customer please proceed to the Billing &amp; Shipping section.</p>
-
-                                <p class="form-row form-row-first">
-                                    <label for="username">Username or email <span class="required">*</span>
-                                    </label>
-                                    <input type="text" id="username" name="username" class="input-text">
-                                </p>
-                                <p class="form-row form-row-last">
-                                    <label for="password">Password <span class="required">*</span>
-                                    </label>
-                                    <input type="password" id="password" name="password" class="input-text">
-                                </p>
-                                <div class="clear"></div>
-
-
-                                <p class="form-row">
-                                    <input type="submit" value="Login" name="login" class="button">
-                                    <label class="inline" for="rememberme"><input type="checkbox" value="forever" id="rememberme" name="rememberme"> Remember me </label>
-                                </p>
-                                <p class="lost_password">
-                                    <a href="#">Lost your password?</a>
-                                </p>
-
-                                <div class="clear"></div>
-                            </form>
-
-                            <div class="woocommerce-info">Have a coupon? <a class="showcoupon" data-toggle="collapse" href="#coupon-collapse-wrap" aria-expanded="false" aria-controls="coupon-collapse-wrap">Click here to enter your code</a>
-                            </div>
-
-                            <form id="coupon-collapse-wrap" method="post" class="checkout_coupon collapse">
-
-                                <p class="form-row form-row-first">
-                                    <input type="text" value="" id="coupon_code" placeholder="Coupon code" class="input-text" name="coupon_code">
-                                </p>
-
-                                <p class="form-row form-row-last">
-                                    <input type="submit" value="Apply Coupon" name="apply_coupon" class="button">
-                                </p>
-
-                                <div class="clear"></div>
-                            </form>
-
-
-                            <h3 id="order_review_heading">Your order</h3>
-
-                            <div id="order_review" style="position: relative;">
-                                <table class="shop_table">
-                                    <thead>
-                                        <tr>
-                                            <th class="product-name">Product</th>
-                                            <th class="product-total">Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                      
-                                        <tr class="cart_item">
-                                            {% for ci in cart.cartitem_set.all %}
-                                            <td class="product-name">
-                                                Ship Your Idea <strong class="product-quantity">× {{ci.quantity}}</strong> </td>
-                                            <td class="product-total">
-                                                <span class="amount">Rs {{ci.rate}}</span> </td>
-                                                {% endfor %}
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-
-                                        <tr class="cart-subtotal">
-                                            {% for ci in cart.cartitem_set.all %}
-                                            <th>Cart Subtotal</th>
-                                            <td><span class="amount">Rs {{ci.subtotal}}</span>
-                                            </td>
-                                            {% endfor %}
-                                        </tr>
-
-                                        <tr class="shipping">
-                                            
-                                            {% for ci in cart.cartitem_set.all %}
-                                            <th>Shipping and Handling</th>
-                                            <td>
-
-                                                Free Shipping
-                                                <input type="hidden" class="shipping_method" value="free_shipping" id="shipping_method_0" data-index="0" name="shipping_method[0]">
-                                            </td>
-                                            {% endfor %}
-                                        </tr>
-
-
-                                        <tr class="order-total">
-                                            
-                                            {% for ci in cart.cartitem_set.all %}
-                                            <th>Order Total</th>
-                                            <td><strong><span class="amount">Rs {{cart.total}}</span></strong> </td>
-                                            {% endfor %}
-                                         
-                                        </tr>
-                                      
-                                    </tfoot>
-                                   
-                                </table>
-                            
-                            <form action="" method="POST">
-                                {% csrf_token %}
-                                {{form.as_p}}
-                                <button class="btn btn-success">PLACE ORDER</button>
-                                <button a href="{% url 'home:mycart' %}" class="btn btn-success">Update Cart</button>
-                            </form>
-
-                
-
-                                    <div id="payment">
-                                        <ul class="payment_methods methods">
-                                            <li class="payment_method_bacs">
-                                                <input type="radio" data-order_button_text="" checked="checked" value="bacs" name="payment_method" class="input-radio" id="payment_method_bacs">
-                                                <label for="payment_method_bacs">Direct Bank Transfer </label>
-                                                <div class="payment_box payment_method_bacs">
-                                                    <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped until the funds have cleared in our account.</p>
-                                                </div>
-                                            </li>
-                                            <li class="payment_method_cheque">
-                                                <input type="radio" data-order_button_text="" value="cheque" name="payment_method" class="input-radio" id="payment_method_cheque">
-                                                <label for="payment_method_cheque">Cheque Payment </label>
-                                                <div style="display:none;" class="payment_box payment_method_cheque">
-                                                    <p>Please send your cheque to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
-                                                </div>
-                                            </li>
-                                            <li class="payment_method_paypal">
-                                                <input type="radio" data-order_button_text="Proceed to PayPal" value="paypal" name="payment_method" class="input-radio" id="payment_method_paypal">
-                                                <label for="payment_method_paypal">PayPal <img alt="PayPal Acceptance Mark" src="https://www.paypalobjects.com/webstatic/mktg/Logo/AM_mc_vs_ms_ae_UK.png"><a title="What is PayPal?" onclick="javascript:window.open('https://www.paypal.com/gb/webapps/mpp/paypal-popup','WIPaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=1060, height=700'); return false;" class="about_paypal" href="https://www.paypal.com/gb/webapps/mpp/paypal-popup">What is PayPal?</a>
-                                                </label>
-                                                <div style="display:none;" class="payment_box payment_method_paypal">
-                                                    <p>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal account.</p>
-                                                </div>
-                                            </li>
-                                        </ul>
-
-                                        <!-- <div class="form-row place-order"> -->
-
-                                            <!-- <input type="submit" data-value="Place order" value="Place order" id="place_order" name="woocommerce_checkout_place_order" class="button alt" method="POST">{% csrf_token %} -->
-                                           
-
-                                        <!-- </div> -->
-
-                                        <div class="clear"></div>
-
-                                    </div>
-                                </div>
-                            </form>
-
-                        </div>                       
-                    </div>                    
-                </div>
-            </div>
+        <div class="col-md-4 mb-4">
         </div>
-    </div>
 
-    {% endblock content %}
+      </div>
+
+    </div>
+  </main>
+
+{% endblock content %}
+
+{% block extra_scripts %}
+<script>
+var hideable_shipping_form = Rs('.hideable_shipping_form');
+var hideable_billing_form = Rs('.hideable_billing_form');
+
+var use_default_shipping = document.querySelector("input[name=use_default_shipping]");
+var use_default_billing = document.querySelector("input[name=use_default_billing]");
+
+use_default_shipping.addEventListener('change', function() {
+  if (this.checked) {
+    hideable_shipping_form.hide();
+  } else {
+    hideable_shipping_form.show();
+  }
+})
+
+use_default_billing.addEventListener('change', function() {
+  if (this.checked) {
+    hideable_billing_form.hide();
+  } else {
+    hideable_billing_form.show();
+  }
+})
+
+</script>
+{% endblock extra_scripts %}

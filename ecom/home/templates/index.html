@@ -23,6 +23,7 @@
             </div>
 
             <div class="carousel-inner" role="listbox">
+                
                 {% for slider in sliders %}
                 <div class="item {{slider.status}}">
                     <div class="single-slide">
@@ -36,7 +37,7 @@
                                                 <h2>{{slider.text_one}}</h2>
                                                 <p>{{slider.text_two}}</p>
                                                 <p>{{slider.text_three}}</p>
-                                                <a href="" class="readmore">Learn more</a>
+                                                <a href="http://127.0.0.1:8000/{{slider.url}}/" class="readmore">{{ slider.text_one }} {{slider.text_two}}</a>
                                             </div>
                                         </div>
                                     </div>
@@ -120,7 +121,6 @@
             </div>
         </div>
     </div> <!-- End main content area -->
-    
     <div class="brands-area">
         <div class="zigzag-bottom"></div>
         <div class="container">
@@ -145,7 +145,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="single-product-widget">
-                        <h2 class="product-wid-title">Top Sellers</h2>
+                        <h2 class="product-wid-title">Top Items</h2>
                         {% for item in indexsale %}
                             <div class="single-wid-product">
                                 <a href="single-product.html"><img src="{{item.image.url}}" alt="image of {{item.title}}" class="product-thumb"></a>
@@ -188,7 +188,7 @@
                     </div>
                 </div><div class="col-md-4">
                     <div class="single-product-widget">
-                        <h2 class="product-wid-title">Top New</h2>
+                        <h2 class="product-wid-title">New Items</h2>
                         {% for item in indexnew %}
                         <div class="single-wid-product">
                             <a href="single-product.html"><img src="{{item.image.url}}" alt="image of {{item.title}}" class="product-thumb"></a>

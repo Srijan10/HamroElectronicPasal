@@ -7,6 +7,7 @@
         <li class="active">
           <a href="{% url 'home:category-list' node.title %}">
             {{ node.title }}
+
           </a>
           {% if not node.is_leaf_node %}
           <div class="sub-sidebar-1" >
@@ -14,6 +15,7 @@
           <ul>
             <li>
               {{ children }}
+              
             </li>
           </ul>
           

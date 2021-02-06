@@ -10,11 +10,13 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.auth.models import User
 from PIL import Image
 from ckeditor.fields import RichTextField
+from phonenumber_field.modelfields import PhoneNumberField
 
 # Create your models here.
 
 STATUS = (('active','active'),('','default'))
 STATUSS = (('sale','sale'),('recent','recent'),('new','new'),('','default'))
+
 STOCK = (('In Stock','In Stock'),('Out of Stock','Out of Stock'))
 ADDRESS_CHOICES = (
     ('B', 'Billing'),
@@ -70,6 +72,9 @@ class Item(models.Model):
     def __str__(self):
         return self.title
 
+    def image_tag(self):
+        return mark_safe('<img src="{}" height="50"/>'.format(self.image.url))
+
     def get_absolute_url(self):
         return reverse("home:single-product",kwargs={'slug':self.slug})
 
@@ -90,10 +95,40 @@ class Item(models.Model):
 class ShopCart(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True)
-    quantity = models.IntegerField()
+    ordered = models.BooleanField(default=False)
+    quantity = models.IntegerField(default=1)
 
     def __str__(self):
         return self.item.title
+
+    @property
+    def price(self):
+        return(self.item.price)
+
+    def __str__(self):
+        return f"{self.quantity} of {self.item.title}"
+
+    def price(self):
+        return self.item.price
+
+    def get_total_item_price(self):
+        return self.quantity * self.item.price
+
+    
+    def Total_Price(self):
+        return self.quantity * self.item.price
+
+    def get_total_discount_item_price(self):
+        return self.quantity * self.item.discounted_price
+
+    def get_amount_saved(self):
+        return self.get_total_item_price() - self.get_total_discount_item_price()
+
+    def get_final_price(self):
+        if self.item.discounted_price:
+            return self.get_total_discount_item_price()
+        return self.get_total_item_price()
+
 
 
 class OrderItem(models.Model):
@@ -106,7 +141,14 @@ class OrderItem(models.Model):
     def __str__(self):
         return f"{self.quantity} of {self.item.title}"
 
+    def price(self):
+        return self.item.price
+
     def get_total_item_price(self):
+        return self.quantity * self.item.price
+
+    
+    def Total_Price(self):
         return self.quantity * self.item.price
 
     def get_total_discount_item_price(self):
@@ -125,7 +167,9 @@ class Order(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
     ref_code = models.CharField(max_length=20, blank=True, null=True)
+    carts = models.ManyToManyField(ShopCart)
     items = models.ManyToManyField(OrderItem)
+    phone = PhoneNumberField(blank=True)
     start_date = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField()
     ordered = models.BooleanField(default=False)
@@ -143,6 +187,11 @@ class Order(models.Model):
     refund_granted = models.BooleanField(default=False)
     def __str__(self):
         return self.user.username
+    
+    def Items(self):
+        return ",".join([str(p) for p in self.items.all()])
+
+    
 
     def get_total(self):
         total = 0
@@ -179,7 +228,7 @@ class Address(models.Model):
 
 
 class Payment(models.Model):
-    stripe_charge_id = models.CharField(max_length=50)
+    eSewa_No = models.IntegerField(blank=True,null=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.SET_NULL, blank=True, null=True)
     amount = models.FloatField()
@@ -271,6 +320,10 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.user.username} Profile'
     
+    def user_name(self):
+        return self.user.first_name+ ' ' + self.user.last_name+'['+ self.user.username+']'
+
+
     def save(self, *args, **kwargs):
         super(Profile, self).save(*args, **kwargs)
 
@@ -281,7 +334,10 @@ class Profile(models.Model):
             img.thumbnail(output_size)
             img.save(self.image.path)
 
-
+     
+    def image_tag(self):
+        return mark_safe('<img src="{}" height="50"/>'.format(self.image.url))
+    image_tag.short_description = 'Image'
 
 def userprofile_receiver(sender, instance, created, *args, **kwargs):
     if created:
@@ -299,6 +355,8 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.full_name
+
+        
 
 class Cart(models.Model):
     customer = models.ForeignKey(
@@ -351,9 +409,10 @@ class Riview(models.Model):
         return f'rated by {self.user}'
 
 class Maintaince(models.Model):
-    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE,blank=True, null=True)
+
     email=models.EmailField()
-    phone=models.IntegerField()
+    phone=PhoneNumberField()
     problem=models.CharField(max_length=500)
 
     def __str__(self):
